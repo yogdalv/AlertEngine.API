@@ -4,16 +4,18 @@ namespace AlertEngine.API.Services
 {
     public class RuleEvaluator
     {
-        private readonly List<AlertRule> _rules;
+        private readonly IRuleProvider _ruleProvider;
 
-        public RuleEvaluator(List<AlertRule> rules)
+        public RuleEvaluator(IRuleProvider ruleProvider)
         {
-            _rules = rules;
+            _ruleProvider = ruleProvider;
         }
 
         public IEnumerable<AlertRule> Evaluate(AlertEvent alertEvent)
         {
-            return _rules
+            var rules = _ruleProvider.GetRules();
+
+            return rules
                 .Where(r => r.Metric == alertEvent.Metric)
                 .Where(r => EvaluateCondition(r, alertEvent.Value))
                 .ToList();

@@ -1,4 +1,6 @@
 
+using AlertEngine.API.Services;
+
 namespace AlertEngine.API
 {
     public class Program
@@ -14,6 +16,10 @@ namespace AlertEngine.API
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            // Dependency Injection
+            builder.Services.AddSingleton<IRuleProvider, FileRuleProvider>();
+            builder.Services.AddSingleton<RuleEvaluator>();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -23,7 +29,9 @@ namespace AlertEngine.API
                 app.UseSwaggerUI();
             }
 
-            app.UseHttpsRedirection();
+            //Remove it completely (or comment it).
+            //Containers behind AKS/Ingress don’t use this.
+            //app.UseHttpsRedirection();
 
             app.UseAuthorization();
 

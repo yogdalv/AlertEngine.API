@@ -11,21 +11,12 @@ namespace AlertEngine.API.Controllers
     public class AlertController : ControllerBase
     {
         private readonly RuleEvaluator _ruleEvaluator;
-        private readonly List<AlertRule> _rules;
+        private readonly IRuleProvider _ruleProvider;
 
-        public AlertController()
+        public AlertController(RuleEvaluator ruleEvaluator, IRuleProvider ruleProvider)
         {
-            var json = System.IO.File.ReadAllText("Rules/rules.json");
-            //_rules = JsonSerializer.Deserialize<List<AlertRule>>(json)!;
-
-            var options = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            };
-
-            _rules = JsonSerializer.Deserialize<List<AlertRule>>(json, options)!;
-
-            _ruleEvaluator = new RuleEvaluator(_rules);
+            _ruleEvaluator = ruleEvaluator;
+            _ruleProvider = ruleProvider;
         }
 
         [HttpPost("evaluate")]
@@ -43,7 +34,7 @@ namespace AlertEngine.API.Controllers
         [HttpGet("rules")]
         public IActionResult GetRules()
         {
-            return Ok(_rules);
+            return Ok(_ruleProvider.GetRules());
         }
     }
 }
