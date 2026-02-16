@@ -1,0 +1,16 @@
+[
+  {
+    "ruleId": "cpu-high",
+    "metric": "CPU",
+    "operator": ">",
+    "threshold": 70,
+    "severity": "High"
+  },
+  {
+    "ruleId": "memory-high",
+    "metric": "Memory",
+    "operator": ">",
+    "threshold": 80,
+    "severity": "Medium"
+  }
+]
